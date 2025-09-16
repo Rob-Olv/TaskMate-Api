@@ -1,0 +1,47 @@
+﻿version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: taskmate_api
+    ports:
+      - "8080:80"
+    environment:
+      - DOTNET_RUNNING_IN_CONTAINER=true
+      - DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: always
+    networks:
+      - taskmate_network
+
+  db:
+    image: postgres:15
+    container_name: taskmate
+    restart: always
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - taskmate_network
+
+volumes:
+  postgres_data:
+
+networks:
+  taskmate_network:
+    driver: bridge
