@@ -31,27 +31,25 @@ jobs:
 
       - name: Extract version info
         id: version
+        if: startsWith(github.ref, 'refs/tags/')
         run: |
-          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-            VERSION=${GITHUB_REF#refs/tags/v}
-            MAJOR=$(echo $VERSION | cut -d. -f1)
-            MINOR=$(echo $VERSION | cut -d. -f2)
-            PATCH=$(echo $VERSION | cut -d. -f3)
-            echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-            echo "MAJOR=$MAJOR" >> $GITHUB_OUTPUT
-            echo "MINOR=$MINOR" >> $GITHUB_OUTPUT
-            echo "PATCH=$PATCH" >> $GITHUB_OUTPUT
-          fi
+          VERSION=${GITHUB_REF#refs/tags/v}
+          MAJOR=$(echo $VERSION | cut -d. -f1)
+          MINOR=$(echo $VERSION | cut -d. -f2)
+          PATCH=$(echo $VERSION | cut -d. -f3)
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "MAJOR=$MAJOR" >> $GITHUB_OUTPUT
+          echo "MINOR=$MINOR" >> $GITHUB_OUTPUT
+          echo "PATCH=$PATCH" >> $GITHUB_OUTPUT
 
       - name: Build and Push Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: Dockerfile
+          file: TaskMate.Api/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
-            smafs/taskmate-api:latest
-            ${{ github.ref_type == 'tag' && steps.version.outputs.VERSION }}
-            ${{ github.ref_type == 'tag' && steps.version.outputs.MAJOR }} 
-            ${{ github.ref_type == 'tag' && steps.version.outputs.MAJOR }}.${{ steps.version.outputs.MINOR }}
-            ${{ github.ref_type == 'tag' && steps.version.outputs.VERSION }}
+            rognarok/taskmate-api:latest
+            ${{ startsWith(github.ref, 'refs/tags/') && 'rognarok/taskmate-api:' }}${{ steps.version.outputs.VERSION }}
+            ${{ startsWith(github.ref, 'refs/tags/') && 'rognarok/taskmate-api:' }}${{ steps.version.outputs.MAJOR }}
+            ${{ startsWith(github.ref, 'refs/tags/') && 'rognarok/taskmate-api:' }}${{ steps.version.outputs.MAJOR }}.${{ steps.version.outputs.MINOR }}
