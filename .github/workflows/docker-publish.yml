@@ -49,7 +49,7 @@ jobs:
           file: TaskMate.Api/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
-            rognarok/taskmate-api:latest
-            ${{ startsWith(github.ref, 'refs/tags/') && 'rognarok/taskmate-api:' }}${{ steps.version.outputs.VERSION }}
-            ${{ startsWith(github.ref, 'refs/tags/') && 'rognarok/taskmate-api:' }}${{ steps.version.outputs.MAJOR }}
-            ${{ startsWith(github.ref, 'refs/tags/') && 'rognarok/taskmate-api:' }}${{ steps.version.outputs.MAJOR }}.${{ steps.version.outputs.MINOR }}
+            smafs/taskmate-api:latest
+            ${{ startsWith(github.ref, 'refs/tags/') && 'smafs/taskmate-api:' }}${{ steps.version.outputs.VERSION }}
+            ${{ startsWith(github.ref, 'refs/tags/') && 'smafs/taskmate-api:' }}${{ steps.version.outputs.MAJOR }}
+            ${{ startsWith(github.ref, 'refs/tags/') && 'smafs/taskmate-api:' }}${{ steps.version.outputs.MAJOR }}.${{ steps.version.outputs.MINOR }}
