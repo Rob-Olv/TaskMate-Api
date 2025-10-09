@@ -23,9 +23,6 @@ namespace TaskMate.Infrastructure
 
             builder.Property(x => x.CategoryId).HasColumnName("categoryId").IsRequired();
             builder.HasOne(x => x.Category).WithMany(x => x.Tasks).HasForeignKey(x => x.CategoryId);
-
-            builder.Property(x => x.ImageId).HasColumnName("imageId").IsRequired();
-            builder.
         }
     }
 }

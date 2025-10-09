@@ -12,6 +12,7 @@ namespace TaskMate.Domain
         public virtual List<Category> Categories { get; set; }
         public virtual List<Task> Tasks { get; set; }
 
+        public User() { }
         public User(Email email)
         {
             Email = email;

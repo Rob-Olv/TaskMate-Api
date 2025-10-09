@@ -21,6 +21,9 @@ namespace TaskMate.Infrastructure
                     .IsRequired();
             });
             builder.Property(x => x.Status).HasColumnName("status").IsRequired();
+
+            builder.Property(x => x.TaskId).HasColumnName("taskId").IsRequired();
+            builder.HasOne(x => x.Task).WithMany(x => x.Imagens).HasForeignKey(x => x.TaskId);
         }
     }
 }

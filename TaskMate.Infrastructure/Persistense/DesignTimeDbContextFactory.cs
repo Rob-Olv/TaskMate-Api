@@ -10,12 +10,16 @@ namespace TaskMate.Infrastructure
     {
         public ApplicationDbContext CreateDbContext(string[] args)
         {
-            var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            var fileName = Directory.GetCurrentDirectory() + $"/../CpmPedidos.API/appsettings.{environmentName}.json";
+            var basePath = Path.Combine(Directory.GetCurrentDirectory(), "../TaskMate.Api");
+
+            var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
 
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile(fileName)
+                .SetBasePath(basePath)
+                .AddJsonFile("appsettings.json", optional: false)
+                .AddJsonFile($"appsettings.{environmentName}.json", optional: true)
                 .Build();
+
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
             var builder = new DbContextOptionsBuilder<ApplicationDbContext>();

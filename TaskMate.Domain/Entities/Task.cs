@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TaskMate.Domain
 {
@@ -11,9 +12,9 @@ namespace TaskMate.Domain
         public StatusTaskEnum Status { get; set; }
         public int UserId { get; set; }
         public int CategoryId { get; set; }
-        public int ImageId { get; set; }
 
         public virtual Category Category { get; set; }
         public virtual User User { get; set; }
+        public virtual List<Image> Imagens { get; set; }
     }
 }
